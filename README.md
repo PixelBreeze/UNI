@@ -1,2 +1,2 @@
 # UNI
-lame university works that a child can do
+lame university works that a child could do
