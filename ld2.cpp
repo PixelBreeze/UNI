@@ -17,6 +17,16 @@ int getNumber()
     }
     return x;
 }
+float getArrVal()
+{
+    float x;
+    while(!(std::cin >> x)){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Wrong Input. Try Again: ";
+    }
+    return x;
+}
 
 void outputArray(int rows,int columns,float array[]) 
 {
@@ -35,7 +45,7 @@ float* ArrayManual(int size)
     int i;
     std::cout << "Manual number input!" << std::endl;
     for (i = 0; i < size; i++){
-            arrManual[i] = getNumber();
+            arrManual[i] = getArrVal();
         }
     return arrManual;
 }
@@ -52,14 +62,18 @@ float* ArrayRand(int size)
     return arrRand;
 }
 
-/*void 1variants(float array[], int rows,int columns) {
-    float Svalue = -50;
+void variants(float array[], int rows,int columns) {
+    float Svalue;
     float *arrVariants = new float[9];
-    for (i = 0; i < size; i++){
-        if (array[i] <= Svalue)
-        array[i] = a;
+    int i,j;
+    for (i = 0; i < rows; i++){
+        for (j = 0; j < columns; j++) 
+        {
+          //  arrVariants[k] = array[i*columns+j];
+          //  arrVariants[k+1] = array[i*columns+j];
+        }
     }
-}*/
+}
 
 bool ProcessArgs(int argc, char** argv)
 {
@@ -109,6 +123,7 @@ int main(int argc, char **argv)
         array=ArrayRand(size);
     }
     outputArray(rows,columns,array);
+
     delete[] array;
     return 0;
 }
