@@ -91,7 +91,6 @@ bool ProcessArgs(int argc, char** argv)
 
 int main(int argc, char **argv)
 {
-    std::cout << "Ernests Sutko 2.gr 171rdb271" <<std::endl;
     std::cout << std::fixed;
     std::cout << std::setprecision(2);//set decimal point 2 0's
     bool x;
