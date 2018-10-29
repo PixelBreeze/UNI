@@ -65,13 +65,16 @@ float* ArrayRand(int size)
 void variants(float array[], int rows,int columns) {
     float Svalue;
     float *arrVariants = new float[9];
-    int i,j;
+    int i,j,k=0;
     for (i = 0; i < rows; i++){
         for (j = 0; j < columns; j++) 
         {
-          //  arrVariants[k] = array[i*columns+j];
-          //  arrVariants[k+1] = array[i*columns+j];
+          arrVariants[k] = array[i*columns+j];
+          arrVariants[k+1] = i+1;
+	  arrVariants[k+2] = j+1;
+	  k=k+3;
         }
+	    std::cout << array[i*columns+j] << " row: " << i << " column: " << j << std::endl; 
     }
 }
 
