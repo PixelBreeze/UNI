@@ -73,8 +73,8 @@ void variants(float array[], int rows,int columns) {
           arrVariants[k+1] = i+1;
 	  arrVariants[k+2] = j+1;
 	  k=k+3;
-        }
-	    std::cout << array[i*columns+j] << " row: " << i << " column: " << j << std::endl; 
+	  std::cout << array[i*columns+j] << " row: " << i << " column: " << j << std::endl; 
+	}
     }
 }
 
