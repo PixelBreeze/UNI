@@ -4,7 +4,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
-#include <getopt.h>
+#include<getopt.h>
 #include<new>
 
 int getNumber()
@@ -28,11 +28,11 @@ float getArrVal()
     return x;
 }
 
-void outputArray(int rows,int columns,float array[]) 
+void outputArray(int rows,int columns,float array[])
 {
     int i,j;
     for (i = 0; i < rows; i++){
-        for (j = 0; j < columns; j++) 
+        for (j = 0; j < columns; j++)
         {
 			std::cout << (i+1) <<" "<< array[i*columns+j] << std::endl;
         }
@@ -65,16 +65,20 @@ float* ArrayRand(int size)
 void variants(float array[], int rows,int columns) {
     float Svalue;
     float *arrVariants = new float[9];
-    int i,j,k=0;
-    for (i = 0; i < rows; i++){
-        for (j = 0; j < columns; j++) 
+    int i,j,k=0,m;
+    for (i = 0; i < rows; i++)
+    {
+        for (j = 0; j < columns; j++)
         {
-          arrVariants[k] = array[i*columns+j];
-          arrVariants[k+1] = i+1;
-	  arrVariants[k+2] = j+1;
-	  k=k+3;
-	  std::cout << array[i*columns+j] << " row: " << i << " column: " << j << std::endl; 
-	}
+            if ( array[i*columns+j] > Svalue ) {
+                
+            }
+            arrVariants[k] = array[i*columns+j];
+            arrVariants[k+1] = i+1;
+            arrVariants[k+2] = j+1;
+            k=k+3;
+            std::cout << arrVariants[m] << " row: " << i << " column: " << j << std::endl;
+        }
     }
 }
 
@@ -126,7 +130,7 @@ int main(int argc, char **argv)
         array=ArrayRand(size);
     }
     outputArray(rows,columns,array);
-
+    variants(array,rows,columns);
     delete[] array;
     return 0;
 }
