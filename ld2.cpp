@@ -63,22 +63,28 @@ float* ArrayRand(int size)
 }
 
 void variants(float array[], int rows,int columns) {
-    float Svalue;
+    float Svalue,prevSvalue;
     float *arrVariants = new float[9];
-    int i,j,k=0,m;
-    for (i = 0; i < rows; i++)
-    {
-        for (j = 0; j < columns; j++)
+    int i,j,k=0,m,Scol,Srow;
+    for (m = 0; m < 3; m++) {
+        for (i = 0; i < rows; i++)
         {
-            if ( array[i*columns+j] > Svalue ) {
-                
+            for (j = 0; j < columns; j++)
+            {
+                if ( array[i*columns+j] <= Svalue && array[i*columns+j] >= prevSvalue) {
+                    Svalue = array[i*columns+j];
+                    Srow = rows;
+                    Scol = columns;
+                    std::cout << "new small values" << Svalue << Srow << Scol << std::endl;
+                }
             }
-            arrVariants[k] = array[i*columns+j];
-            arrVariants[k+1] = i+1;
-            arrVariants[k+2] = j+1;
-            k=k+3;
-            std::cout << arrVariants[m] << " row: " << i << " column: " << j << std::endl;
         }
+    prevSvalue = Svalue;
+    arrVariants[k] = Svalue;
+    arrVariants[k+1] = Srow;
+    arrVariants[k+2] = Scol;
+    std::cout << arrVariants[m] << " row: " << i << " column: " << j << std::endl;
+    k=k+3;
     }
 }
 
