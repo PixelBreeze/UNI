@@ -35,8 +35,9 @@ void outputArray(int rows,int columns,float array[])
     for (i = 0; i < rows; i++){
         for (j = 0; j < columns; j++)
         {
-			std::cout << (i+1) <<" "<< array[i*columns+j] << std::endl;
+			std::cout << std::setw(8) << std::left << array[i*columns+j];
         }
+        std::cout<<std::endl;
     }
 }
 
@@ -56,9 +57,10 @@ float* ArrayRand(int size)
     float* arrRand = new float[size];
     int i;
     std::cout << "Parameter --rand found, numbers will be random!" << std::endl;
-	float max = 50;
+	float Max = 50;
+	float Min = -50;
 		for (i = 0; i < size; i++){
-            arrRand[i] = max * ((float)rand()/(float)RAND_MAX) * 2 - max;
+            arrRand[i] = ((float(rand()) / float(RAND_MAX)) * (Max - Min)) + Min;
         }
     return arrRand;
 }
@@ -147,8 +149,16 @@ int main(int argc, char **argv)
     }
     std::cout << "Enter Row count for array: ";
     rows=getNumber();
+    while (rows <= 0) {
+        std::cout << "Wrong Input. Try Again: ";
+        rows=getNumber();
+    }
     std::cout << "Enter Column count for array: ";
     columns=getNumber();
+    while (columns <= 0) {
+        std::cout << "Wrong Input. Try Again: ";
+        columns=getNumber();
+    }
     int size=rows*columns;//define array size
     float* array;
     //create new array
@@ -157,7 +167,11 @@ int main(int argc, char **argv)
     } else {
         array=ArrayRand(size);
     }
+    std::cout << std::endl;
     outputArray(rows,columns,array);
+    //varianta uzd
+    std::cout << std::endl;
+    std::cout << "1. Varianta uzdevuma masivs: " << std::endl;
     variants(array,rows,columns);
     delete[] array;
     return 0;
