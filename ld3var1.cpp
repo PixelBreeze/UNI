@@ -4,8 +4,19 @@
 #include <string>
 #include <algorithm>
 #include <regex>
+#include <Windows.h>
 using namespace std;
 
+void moveConsole(){
+    for(int i=0; i<15; i++)
+        std::cout<<std::endl;
+}
+
+void pressKey(){
+    std::cout << "Press ENTER to continue...";
+    std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
+    std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
+}
 //remove spaces in line
 string delSpaces(std::string line)
 {
@@ -13,8 +24,27 @@ string delSpaces(std::string line)
     return line;
 }
 
-void outputArray(string array[][5]) {
-    for( int i=0 ; i<6 ; i++ ) {
+void findString(string array[][5],string input,int c,int pos){
+    bool found = false;
+    for( int i=0 ; i<c ; i++ ) {
+        if (input.compare(array[i][pos]) == 0) {
+            for( int j=0 ; j<5 ; j++ ) {
+                std::cout<<array[i][j]<<" ";
+                found = true;
+            }
+            std::cout<<std::endl;
+        }
+    }
+    if(! found) {
+        std::cout<<"Students pēc šāda uzvārda netika atrasts!"<<std::endl;
+    } else {
+        std::cout<<std::endl;
+    }
+
+}
+
+void outputArray(string array[][5],int row) {
+    for( int i=0 ; i<row ; i++ ) {
         for( int j=0 ; j<5 ; j++ ){
             std::cout<<array[i][j]<<" ";
         }
@@ -30,7 +60,7 @@ bool processItem(string item, int c) {
         case 0 :
             //std::cout << "name: ";
             hasNumb = std::any_of(item.begin(), item.end(), ::isdigit);
-            if (hasNumb == false) {
+            if (! hasNumb) {
                 result = true;
             }
             break;
@@ -38,7 +68,7 @@ bool processItem(string item, int c) {
         case 1 :
             //std::cout << "surname: ";
             hasNumb = std::any_of(item.begin(), item.end(), ::isdigit);
-            if (hasNumb == false) {
+            if (! hasNumb) {
                 result = true;
             }
             break;
@@ -126,25 +156,27 @@ bool processLine(std::string line) {
 }
 
 int main () {
-    std::cout<<"171RDB271 Ernests Sutko 2.grupa"<<std::endl;
+    SetConsoleOutputCP(CP_UTF8);
+    setvbuf(stdout, nullptr, _IOFBF, 1000);
+    std::cout<<u8"171RDB271 Ernests Šutko 2.grupa"<<std::endl;
     //variables
     string line,fline,item;
     string filename;
     ofstream errFile;
     errFile.open ("err.txt");
-    bool fileOpen=false,valid=false,validItem=false,failed=false;
+    bool fileOpen=false,valid=false,validItem=false,failed=false,run=true;
     int col=0,row=0;
     //2d array supports 100 lines
     string lineData [100][5];
     //open file. while file not open try again.
-    while(fileOpen == false) {
-        std::cout << "Enter File Name: ";
+    while(! fileOpen) {
+        std::cout << "Ievadiet faila nosaukumu: ";
         std::cin >> filename;
         ifstream myfile(filename);
         if (myfile.is_open()) {
             fileOpen = true;
         }
-        else cout << "Unable to open file or file not found. Try again." << std::endl;
+        else cout << "Nebija iespējams atvērt failu vai fails netika atrasts.\nMeiģiniet velreiz." << std::endl;
     }
     //readfile
     ifstream dataFile(filename);
@@ -154,7 +186,7 @@ int main () {
         //cout << line << '\n';
         valid = processLine(fline);
         //if there are exact number of delimiters = 5
-        if (valid == true) {
+        if (valid) {
             //split string
             std::string delimiter = ";";
             size_t pos = 0;
@@ -163,7 +195,7 @@ int main () {
                 item = fline.substr(0, pos);
                 //cout << "current column: " << col << " item is: " << item << '\n';
                 validItem = processItem(item, col);
-                if (validItem == true) {
+                if (validItem) {
                     //insert formatted item string into array of lines
                     string fItem = delSpaces(item);
                     lineData[row][col] = fItem;
@@ -176,7 +208,7 @@ int main () {
                 }
                 fline.erase(0, pos + delimiter.length());
             }
-            if (failed == false) {
+            if (! failed) {
                 col = 0;
                 row++;
             } else {
@@ -189,10 +221,51 @@ int main () {
             errFile << fline <<"\n";
         }
     }
-    std::cout << "\nSuccessful lines passed: " <<row<<"\n\n";
-    outputArray(lineData);
+    std::cout << "\nPareizas līnijas apstrādātas: " <<row<<"\n\n";
+    outputArray(lineData,row);
     dataFile.close();
     errFile.close();
     //functions for tasks a,b,c
+    while(run) {
+        int task;
+        std::cout<<"\n1. Atrast studentu, kura apliecības numurs atbilst lietotāja ievadītajam."
+        <<"\n2. Meklēt studentu pēc uzvārda."
+        <<"\n3. Sakārtot datus par studentiem augošā secībā pēc vidējās atzīmes."
+        <<"\n4. Iziet."<<std::endl;
+        std::cout<<"\nIzvēlieties darbības nr: ";
+        std::cin>>task;
+        switch(task) {
+            case 1: {
+                std::cout<<"\nIevadiet studenta apliecības nr: ";
+                string id;
+                std::cin>>id;
+                findString(lineData, id,row,3);
+                pressKey();
+                break;
+            }
+            case 2: {
+                std::cout << "\nIevadiet studenta uzvārdu: ";
+                string surname;
+                std::cin >> surname;
+                findString(lineData, surname, row, 1);
+                pressKey();
+                break;
+            }
+            case 3:
+                break;
+            case 4: {
+                run = false;
+                break;
+            }
+            default:
+                std::cout<<"Šādas darbības nav!"<<std::endl;
+                pressKey();
+                break;
+        }
+        if (run)  {
+            moveConsole();
+            outputArray(lineData,row);
+        }
+    }
     return 0;
 }
