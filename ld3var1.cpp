@@ -193,7 +193,6 @@ bool processLine(std::string line) {
 int main () {
     SetConsoleOutputCP(CP_UTF8);
     setvbuf(stdout, nullptr, _IOFBF, 1000);
-    std::cout<<u8"171RDB271 Ernests Šutko 2.grupa"<<std::endl;
     //variables
     string line,fline,item;
     string filename;
