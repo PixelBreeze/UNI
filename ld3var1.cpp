@@ -38,7 +38,7 @@ void findString(string array[][5],string input,int c,int pos){
         }
     }
     if(! found) {
-        std::cout<<"Students pēc šāda uzvārda netika atrasts!"<<std::endl;
+        std::cout<<"Students netika atrasts!"<<std::endl;
     } else {
         std::cout<<std::endl;
     }
@@ -193,6 +193,7 @@ bool processLine(std::string line) {
 int main () {
     SetConsoleOutputCP(CP_UTF8);
     setvbuf(stdout, nullptr, _IOFBF, 1000);
+    std::cout<<u8"171RDB271 Ernests Šutko 2.grupa"<<std::endl;
     //variables
     string line,fline,item;
     string filename;
