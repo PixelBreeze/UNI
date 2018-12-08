@@ -1,14 +1,16 @@
 // reading a text file
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
 #include <algorithm>
 #include <regex>
 #include <Windows.h>
+
 using namespace std;
 
 void moveConsole(){
-    for(int i=0; i<15; i++)
+    for(int i=0; i<11; i++)
         std::cout<<std::endl;
 }
 
@@ -30,8 +32,8 @@ void findString(string array[][5],string input,int c,int pos){
         if (input.compare(array[i][pos]) == 0) {
             for( int j=0 ; j<5 ; j++ ) {
                 std::cout<<array[i][j]<<" ";
-                found = true;
             }
+            found = true;
             std::cout<<std::endl;
         }
     }
@@ -44,12 +46,45 @@ void findString(string array[][5],string input,int c,int pos){
 }
 
 void outputArray(string array[][5],int row) {
+    std::string header[5]={"Vārds","Uzvārds","Dzimšanas Dat.","Apliecības Nr.","Vidējā Atzīme"};
+    for (int k=0; k<5; k++) {
+        std::cout<<"* "<<std::setw(19)<< std::left<<header[k];
+    }
+    std::cout<<std::endl;
     for( int i=0 ; i<row ; i++ ) {
         for( int j=0 ; j<5 ; j++ ){
-            std::cout<<array[i][j]<<" ";
+            std::cout<<"| "<<std::setw(18) << std::left <<array[i][j];
         }
         std::cout<<std::endl;
     }
+}
+
+//create sorted array and pass to output.
+void sortArray(string array[][5],int rows) {
+    std::string sortedArray[rows][5];
+    int currentRow=0;
+    double smallest=11;
+    for (int i = 0; i < rows; i++) {
+        for(int j = 0; j < rows; j++) {
+            double current = ::atof(array[j][4].c_str());
+            if(smallest >= current && current <= 10) {
+                smallest = current;
+                currentRow = j;
+            }
+        }
+        for(int k = 0; k < 5; k++) {
+            sortedArray[i][k] = array[currentRow][k];
+        }
+        smallest = 11;
+        array[currentRow][4]="12";
+    }
+    for( int i=0 ; i<rows ; i++ ) {
+        for( int j=0 ; j<5 ; j++ ){
+            array[i][j]=sortedArray[i][j];
+        }
+    }
+    std::cout<<"\nDati tika sakāroti!\n";
+    pressKey();
 }
 
 //validates each item from line
@@ -112,7 +147,7 @@ bool processItem(string item, int c) {
             //ID
         case 3 : {
             //std::cout << "ID: ";
-            std::regex regexPattern ("^[0-9]{3}[a-zA-Z]{3}[0-9]{3}$");
+            std::regex regexPattern ("^[0-9]{3}[A-Z]{3}[0-9]{3}$");
             if (std::regex_match (item, regexPattern)) {
                 //std::cout << "ID Matched\n";
                 return true;
@@ -225,15 +260,20 @@ int main () {
     outputArray(lineData,row);
     dataFile.close();
     errFile.close();
-    //functions for tasks a,b,c
+    //function calls for tasks a,b,c
     while(run) {
-        int task;
+        string inp;
         std::cout<<"\n1. Atrast studentu, kura apliecības numurs atbilst lietotāja ievadītajam."
         <<"\n2. Meklēt studentu pēc uzvārda."
         <<"\n3. Sakārtot datus par studentiem augošā secībā pēc vidējās atzīmes."
         <<"\n4. Iziet."<<std::endl;
         std::cout<<"\nIzvēlieties darbības nr: ";
-        std::cin>>task;
+        std::cin>>inp;
+        bool hasNumb = std::any_of(inp.begin(), inp.end(), ::isdigit);
+        if (!hasNumb) {
+            inp = "0";
+        }
+        int task = std::stoi(inp);
         switch(task) {
             case 1: {
                 std::cout<<"\nIevadiet studenta apliecības nr: ";
@@ -252,6 +292,7 @@ int main () {
                 break;
             }
             case 3:
+                sortArray(lineData,row);
                 break;
             case 4: {
                 run = false;
