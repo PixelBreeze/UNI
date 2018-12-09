@@ -223,7 +223,7 @@ int main () {
         //if there are exact number of delimiters = 5
         if (valid) {
             //split string
-            std::string delimiter = ";";
+            std::string delimiter = "";
             size_t pos = 0;
             //cout << "ROW: " << row << '\n';
             while ((pos = fline.find(delimiter)) != std::string::npos) {
